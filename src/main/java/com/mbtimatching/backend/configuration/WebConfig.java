@@ -10,6 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns("*") //cors 문제 해결
-                .allowCredentials(true);
+                .allowCredentials(true);    //originPatterns를 와일드카드로 지정하고 credentials를 true로 주면 안됨(도메인 잡아줄것)
+                                            //개발 블로그 참고
     }
 }
