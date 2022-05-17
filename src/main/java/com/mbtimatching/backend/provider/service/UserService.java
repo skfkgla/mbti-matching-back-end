@@ -33,6 +33,10 @@ public class UserService implements UserServiceInterface {
                     .userId(registerDto.getUserId())
                     .password(encryptedPassword)
                     .salt(salt)
+                    .gender(registerDto.getGender())
+                    .birth(registerDto.getBirth())
+                    .mbti(registerDto.getMbti())
+                    .nickname(registerDto.getNickname())
                     .build();
             userRepository.save(user);
         }
