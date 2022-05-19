@@ -54,4 +54,7 @@ public class User {
         this.mbti = mbti;
         this.nickname = nickname;
     }
+    public void updateRefreshToken(String refreshToken){
+        this.refreshToken = refreshToken;
+    }
 }

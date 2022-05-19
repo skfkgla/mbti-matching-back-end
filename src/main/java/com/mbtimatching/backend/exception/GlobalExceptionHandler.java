@@ -3,6 +3,7 @@ package com.mbtimatching.backend.exception;
 import com.mbtimatching.backend.exception.error.CustomJwtRuntimeException;
 import com.mbtimatching.backend.exception.error.LoginFailedException;
 import com.mbtimatching.backend.exception.error.MbtiApiCallFailException;
+import com.mbtimatching.backend.exception.error.RegisterFailedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -24,7 +25,6 @@ public class GlobalExceptionHandler {
                 .status(ErrorCode.REQUEST_PARAMETER_BIND_FAILED.getStatus().value())
                 .message(ErrorCode.REQUEST_PARAMETER_BIND_FAILED.getMessage())
                 .code(ErrorCode.REQUEST_PARAMETER_BIND_FAILED.getCode())
-                .timestamp(ErrorCode.REGISTER_FAILED.getTimestamp())
                 .build();
         return new ResponseEntity<>(response, ErrorCode.REQUEST_PARAMETER_BIND_FAILED.getStatus());
     }
@@ -37,7 +37,6 @@ public class GlobalExceptionHandler {
                 .message(ErrorCode.NOT_FOUND_PATH.getMessage())
                 .status(ErrorCode.NOT_FOUND_PATH.getStatus().value())
                 .code(ErrorCode.NOT_FOUND_PATH.getCode())
-                .timestamp(ErrorCode.INVALID_JWT_TOKEN.getTimestamp())
                 .build();
 
         return new ResponseEntity<>(response, ErrorCode.NOT_FOUND_PATH.getStatus());
@@ -50,7 +49,6 @@ public class GlobalExceptionHandler {
                 .message(ErrorCode.METHOD_NOT_ALLOWED.getMessage())
                 .status(ErrorCode.METHOD_NOT_ALLOWED.getStatus().value())
                 .code(ErrorCode.METHOD_NOT_ALLOWED.getCode())
-                .timestamp(ErrorCode.METHOD_NOT_ALLOWED.getTimestamp())
                 .build();
 
         return new ResponseEntity<>(response, ErrorCode.METHOD_NOT_ALLOWED.getStatus());
@@ -62,7 +60,6 @@ public class GlobalExceptionHandler {
                 .message(ErrorCode.UNSUPPORTED_MEDIA_TYPE.getMessage())
                 .status(ErrorCode.UNSUPPORTED_MEDIA_TYPE.getStatus().value())
                 .code(ErrorCode.UNSUPPORTED_MEDIA_TYPE.getCode())
-                .timestamp(ErrorCode.UNSUPPORTED_MEDIA_TYPE.getTimestamp())
                 .build();
 
         return new ResponseEntity<>(response, ErrorCode.UNSUPPORTED_MEDIA_TYPE.getStatus());
@@ -74,7 +71,6 @@ public class GlobalExceptionHandler {
                 .code(ErrorCode.INVALID_JWT_TOKEN.getCode())
                 .message(ErrorCode.INVALID_JWT_TOKEN.getMessage())
                 .status(ErrorCode.INVALID_JWT_TOKEN.getStatus().value())
-                .timestamp(ErrorCode.INVALID_JWT_TOKEN.getTimestamp())
                 .build();
 
         return new ResponseEntity<>(response, ErrorCode.INVALID_JWT_TOKEN.getStatus());
@@ -86,7 +82,6 @@ public class GlobalExceptionHandler {
                 .code(ErrorCode.LOGIN_FAILED.getCode())
                 .message(ErrorCode.LOGIN_FAILED.getMessage())
                 .status(ErrorCode.LOGIN_FAILED.getStatus().value())
-                .timestamp(ErrorCode.LOGIN_FAILED.getTimestamp())
                 .build();
 
         return new ResponseEntity<>(response, ErrorCode.LOGIN_FAILED.getStatus());
@@ -98,10 +93,20 @@ public class GlobalExceptionHandler {
                 .code(ErrorCode.MBTI_API_FAILED.getCode())
                 .message(ErrorCode.MBTI_API_FAILED.getMessage())
                 .status(ErrorCode.MBTI_API_FAILED.getStatus().value())
-                .timestamp(ErrorCode.MBTI_API_FAILED.getTimestamp())
                 .build();
 
         return new ResponseEntity<>(response, ErrorCode.MBTI_API_FAILED.getStatus());
+    }
+    @ExceptionHandler(RegisterFailedException.class)
+    protected ResponseEntity<ErrorResponse> handleRegisterFailedException(RegisterFailedException e) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(ErrorCode.REGISTER_FAILED.getCode())
+                .message(ErrorCode.REGISTER_FAILED.getMessage())
+                .status(ErrorCode.REGISTER_FAILED.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, ErrorCode.REGISTER_FAILED.getStatus());
     }
 }
 
