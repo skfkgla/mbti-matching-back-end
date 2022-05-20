@@ -3,6 +3,8 @@ package com.mbtimatching.backend.provider.service;
 import com.mbtimatching.backend.core.security.role.Role;
 import com.mbtimatching.backend.core.service.UserServiceInterface;
 import com.mbtimatching.backend.entity.User;
+import com.mbtimatching.backend.exception.error.LoginFailedException;
+import com.mbtimatching.backend.exception.error.RegisterFailedException;
 import com.mbtimatching.backend.provider.security.JwtAuthToken;
 import com.mbtimatching.backend.provider.security.JwtAuthTokenProvider;
 import com.mbtimatching.backend.repository.UserRepository;
@@ -32,7 +34,7 @@ public class UserService implements UserServiceInterface {
             User user = userRepository.findByUserId(registerDto.getUserId());
             if(user != null) {
                 // 이미 존재하는 아이디
-                System.out.println("이미 존재하는 아이디");
+                throw new RegisterFailedException();
             }
             //salt 생성
             String salt = SHA256Util.generateSalt();
@@ -56,7 +58,7 @@ public class UserService implements UserServiceInterface {
             //아이디로 유저 꺼내기
             User user = userRepository.findByUserId(loginDto.getUserId());
             if(user == null){   //없으면 예외
-                System.out.println("아이디 틀림");
+                throw new LoginFailedException();
             }
             //salt 꺼내기
             String salt =user.getSalt();
@@ -74,7 +76,7 @@ public class UserService implements UserServiceInterface {
                         .build();
                 user.updateRefreshToken(refreshToken);  //로그인 할 때 마다 리프레시 토큰 업데이트
             }else {
-                System.out.println("로그인 실패");
+                throw new LoginFailedException();
             }
             return Optional.ofNullable(login);
         }
