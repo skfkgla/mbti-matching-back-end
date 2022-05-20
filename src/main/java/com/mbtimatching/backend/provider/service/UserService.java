@@ -3,6 +3,7 @@ package com.mbtimatching.backend.provider.service;
 import com.mbtimatching.backend.core.security.role.Role;
 import com.mbtimatching.backend.core.service.UserServiceInterface;
 import com.mbtimatching.backend.entity.User;
+import com.mbtimatching.backend.exception.error.CustomJwtRuntimeException;
 import com.mbtimatching.backend.exception.error.LoginFailedException;
 import com.mbtimatching.backend.exception.error.RegisterFailedException;
 import com.mbtimatching.backend.provider.security.JwtAuthToken;
@@ -78,6 +79,34 @@ public class UserService implements UserServiceInterface {
             }
             return Optional.ofNullable(login);
         }
+    @Transactional
+    @Override
+    public Optional<ResponseUser.Token> refreshToken(String refreshToken){
+        //request값이 null이면 예외 처리
+        if(refreshToken == null){
+            throw new CustomJwtRuntimeException();
+        }
+        User user = userRepository.findByRefreshToken(refreshToken);
+        //해당 user테이블이 없으면 예외 처리
+        if(user == null){
+            throw new CustomJwtRuntimeException();
+        }
+        //토큰 유효성 검사
+        JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(user.getRefreshToken());
+        if(!jwtAuthToken.validate() || !jwtAuthToken.getData().get("role").equals(Role.USER.getCode())){
+            return Optional.empty();
+        }
+
+        String id = String.valueOf(jwtAuthToken.getData().get("id"));
+        String accessToken = createAccessToken(id); //액세스토큰 재발급
+
+        ResponseUser.Token newToken = ResponseUser.Token.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+        return Optional.ofNullable(newToken);
+
+    }
     @Override
     public String createAccessToken(String id) {
         Date expiredDate = Date.from(LocalDateTime.now().plusMinutes(30).atZone(ZoneId.systemDefault()).toInstant()); // 토큰은 2분만 유지되도록 설정, 2분 후 refresh token
