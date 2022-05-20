@@ -3,6 +3,7 @@ package com.mbtimatching.backend.provider.service;
 import com.mbtimatching.backend.core.security.role.Role;
 import com.mbtimatching.backend.core.service.UserServiceInterface;
 import com.mbtimatching.backend.entity.User;
+import com.mbtimatching.backend.exception.error.CustomJwtRuntimeException;
 import com.mbtimatching.backend.exception.error.LoginFailedException;
 import com.mbtimatching.backend.exception.error.RegisterFailedException;
 import com.mbtimatching.backend.provider.security.JwtAuthToken;
