@@ -44,7 +44,7 @@ public class UserServiceTests {
         assertNotNull(userRepository.findByUserId("test"));
     }
     @Test
-    @DisplayName("회원가입 서비스 테스트")
+    @DisplayName("로그인 서비스 테스트")
     @Transactional
     void loginTest(){
         //회원 정보 등록
@@ -67,6 +67,34 @@ public class UserServiceTests {
         System.out.println(loginResponse.getAccessToken());
         System.out.println(loginResponse.getRefreshToken());
         assertNotNull(loginResponse);
+    }
+    @Test
+    @DisplayName("리프레시 토큰 서비스 테스트")
+    @Transactional
+    void refreshTokenTest(){
+        //회원 정보 등록
+        RequestUser.Register user = RequestUser.Register.builder()
+                .userId("test")
+                .password("test")
+                .gender("man")
+                .mbti(MbtiType.ENFJ)
+                .birth(new Date())
+                .nickname("닉네임")
+                .build();
+        userService.register(user);
+        //로그인
+        RequestUser.Login loginDto = RequestUser.Login.builder()
+                .userId("test")
+                .password("test")
+                .build();
+        //token이 잘 발급 되는지 확인
+        ResponseUser.Login loginResponse = userService.login(loginDto).orElseGet(()-> null);
+
+        ResponseUser.Token newToken = userService.refreshToken(loginResponse.getRefreshToken()).orElseGet(()->null);
+        assertNotNull(newToken.getRefreshToken());
+        assertNotNull(newToken.getAccessToken());
+        System.out.println(newToken.getRefreshToken());
+        System.out.println(newToken.getAccessToken());
     }
 
 
