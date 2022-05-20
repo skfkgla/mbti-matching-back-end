@@ -1,5 +1,6 @@
 package com.mbtimatching.backend.web;
 
+import com.mbtimatching.backend.exception.error.CustomJwtRuntimeException;
 import com.mbtimatching.backend.exception.error.LoginFailedException;
 import com.mbtimatching.backend.provider.service.UserService;
 import com.mbtimatching.backend.web.dto.CommonResponse;
@@ -37,6 +38,17 @@ public class UserController {
                 .status(HttpStatus.OK.value())
                 .message("로그인 성공")
                 .list(user)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @PostMapping("/user/refreshToken")
+    public ResponseEntity<CommonResponse> refreshToken(@RequestBody String refreshToken){
+        ResponseUser.Token token = userService.refreshToken(refreshToken).orElseThrow(() -> new CustomJwtRuntimeException());
+
+        CommonResponse response =CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("로그인 성공")
+                .list(token)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

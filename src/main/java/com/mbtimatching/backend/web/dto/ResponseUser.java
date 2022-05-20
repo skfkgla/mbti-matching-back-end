@@ -10,5 +10,10 @@ public class ResponseUser {
         private String accessToken;
         private String refreshToken;
     }
-
+    @Builder
+    @Data
+    public static class Token {
+        private String accessToken;
+        private String refreshToken;
+    }
 }
