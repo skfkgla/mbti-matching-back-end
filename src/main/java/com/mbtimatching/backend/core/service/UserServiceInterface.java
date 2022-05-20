@@ -10,4 +10,5 @@ public interface UserServiceInterface {
     Optional<ResponseUser.Login> login(RequestUser.Login loginDto);
     String createRefreshToken(String id);
     String createAccessToken(String id);
+    Optional<ResponseUser.Token> refreshToken(String refreshToken);
 }
