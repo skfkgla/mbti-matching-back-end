@@ -33,11 +33,11 @@ public class MatchingController {
             JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(token.get());
             userId = jwtAuthToken.getData().getSubject();
         }
-        ResponseMatching.Random mbti = matchingService.randomMatching(userId).orElseGet(()-> null);
+        ResponseMatching.Select user = matchingService.randomMatching(userId).orElseGet(()-> null);
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("랜덤 매칭 성공")
-                .list(mbti)
+                .list(user)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -49,10 +49,11 @@ public class MatchingController {
             JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(token.get());
             userId = jwtAuthToken.getData().getSubject();
         }
-
+        ResponseMatching.Select user = matchingService.selectMatching(userId, selectDto.getMbti()).orElseGet(()-> null);
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("선택 매칭 성공")
+                .list(user)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
