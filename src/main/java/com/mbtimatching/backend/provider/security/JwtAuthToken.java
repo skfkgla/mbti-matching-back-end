@@ -5,7 +5,6 @@ import com.mbtimatching.backend.exception.error.CustomJwtRuntimeException;
 import io.jsonwebtoken.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 
 import java.security.Key;
 import java.util.Date;
