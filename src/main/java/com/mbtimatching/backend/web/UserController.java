@@ -9,6 +9,7 @@ import com.mbtimatching.backend.web.dto.ResponseUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,6 +52,10 @@ public class UserController {
                 .list(token)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/home")
+    public String getHome(){
+        return "Hello World!";
     }
 
 }

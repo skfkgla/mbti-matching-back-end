@@ -15,4 +15,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u " +
             "where u.mbti = :mbti ")
     List<User> findBySelcetMbti(MbtiType mbti);
+
 }

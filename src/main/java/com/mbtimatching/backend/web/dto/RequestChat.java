@@ -10,14 +10,11 @@ import java.util.UUID;
 @Getter
 public class RequestChat {
     @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
     @Builder
     public static class ChatMessage {
-        private Long roomId;
+        private String roomId;
         private String sender;
         private String message;
         private LocalDateTime sendDate;
-
     }
 }

@@ -18,10 +18,14 @@ public class User {
     //사용자 엔티티
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="user_idx")
     private Long id;
 
     @Column(name="user_id")
     private String userId;
+
+    @OneToMany(mappedBy = "user")
+    private List<Room> roomList = new ArrayList<>();
 
     @Column(name="password")
     private String password;
@@ -56,5 +60,8 @@ public class User {
     }
     public void updateRefreshToken(String refreshToken){
         this.refreshToken = refreshToken;
+    }
+    public void addRoom(Room room){
+        this.roomList.add(room);
     }
 }

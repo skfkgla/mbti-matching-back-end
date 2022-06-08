@@ -1,39 +1,35 @@
 package com.mbtimatching.backend.entity;
 
-import lombok.AccessLevel;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.UUID;
 
+@Table(name = "room")
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Room {
     @Id
-    @GeneratedValue
     @Column(name = "room_id")
-    private Long id;
-    private String name;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long roomId;
+    @Column(name = "room_name")
+    private String roomName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_idx")
+    private User user;
 
     @Builder
-    public Room(String name) {
-        this.name = name;
+    public Room(String roomName,User user) {
+        this.roomName = roomName;
+        this.user = user;
     }
 
-    /**
-     * 채팅방 생성
-     * @param name 방 이름
-     * @return Room Entity
-     */
-    public static Room createRoom(String name) {
-        return Room.builder()
-                .name(name)
-                .build();
-    }
+
 
 }

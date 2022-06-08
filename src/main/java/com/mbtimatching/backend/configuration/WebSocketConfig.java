@@ -24,6 +24,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         //the url is for Websocket handshake
         registry.addEndpoint("/ws-stomp") //handshake가 될 endpoint지정
+                .setAllowedOrigins("*")
                 .withSockJS(); //SockJS사용
     }
 

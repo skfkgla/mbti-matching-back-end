@@ -11,10 +11,7 @@ import com.mbtimatching.backend.web.dto.ResponseMatching;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -41,15 +38,15 @@ public class MatchingController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @PostMapping("/matching/select")
-    public ResponseEntity<CommonResponse> selcetMatching(HttpServletRequest request, @RequestBody RequestMatching.Matching selectDto){
+    @GetMapping("/matching/select")
+    public ResponseEntity<CommonResponse> selcetMatching(HttpServletRequest request, @RequestParam MbtiType mbti){
         Optional<String> token = jwtAuthTokenProvider.resolveToken(request);
         String userId = null;
         if(token.isPresent()){
             JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(token.get());
             userId = jwtAuthToken.getData().getSubject();
         }
-        ResponseMatching.Select user = matchingService.selectMatching(userId, selectDto.getMbti()).orElseGet(()-> null);
+        ResponseMatching.Select user = matchingService.selectMatching(userId, mbti).orElseGet(()-> null);
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("선택 매칭 성공")

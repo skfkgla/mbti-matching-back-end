@@ -121,8 +121,8 @@ public class MatchingServiceTests {
                 .build();
         userService.register(user3);
 
-        ResponseMatching.Select matching = matchingService.selectMatching(user.getUserId(), MbtiType.ESTJ).orElseGet(() -> null);
-        System.out.println(matching.getMatchingUser().getUserId());
-        assertNotNull(matchingService.randomMatching(user.getUserId()));
+//        ResponseMatching.Select matching = matchingService.selectMatching(user.getUserId(), MbtiType.ESTJ).orElseGet(() -> null);
+//        System.out.println(matching.getMatchingUser().getUserId());
+//        assertNotNull(matchingService.randomMatching(user.getUserId()));
     }
 }
