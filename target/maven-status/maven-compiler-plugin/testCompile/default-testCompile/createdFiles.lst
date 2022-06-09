@@ -1,0 +1,4 @@
+com\mbtimatching\backend\MbtiMatchingApplicationTests.class
+com\mbtimatching\backend\repository\DogRepositoryTests.class
+com\mbtimatching\backend\provider\service\MatchingServiceTests.class
+com\mbtimatching\backend\provider\service\UserServiceTests.class
