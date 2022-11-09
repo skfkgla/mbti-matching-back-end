@@ -1,6 +1,6 @@
 package com.mbtimatching.backend.web.dto;
 
-import com.mbtimatching.backend.entity.User;
+import com.mbtimatching.backend.entity.ChatRoom;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,11 +10,7 @@ public class ResponseChatRoom {
     @Data
     @Builder
     public static class Room {
-        private String roomId;
-    }
-    @Data
-    @Builder
-    public static class RoomList{
-        private List<Long> roomList;
+        private Long roomId;
+        private List<String> userNicknames;
     }
 }

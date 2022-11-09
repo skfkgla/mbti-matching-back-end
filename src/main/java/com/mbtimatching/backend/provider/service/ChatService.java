@@ -1,88 +1,62 @@
 package com.mbtimatching.backend.provider.service;
 
-import com.mbtimatching.backend.entity.Chat;
-import com.mbtimatching.backend.entity.Room;
-import com.mbtimatching.backend.entity.User;
-import com.mbtimatching.backend.repository.ChatRepository;
+import com.mbtimatching.backend.core.service.ChatServiceInterface;
+import com.mbtimatching.backend.entity.ChatRoom;
+import com.mbtimatching.backend.entity.Member;
+import com.mbtimatching.backend.exception.error.CustomJwtRuntimeException;
 import com.mbtimatching.backend.repository.ChatRoomRepository;
-import com.mbtimatching.backend.repository.UserRepository;
-import com.mbtimatching.backend.web.dto.ResponseChat;
-import com.mbtimatching.backend.web.dto.ResponseChatRoom;
-import com.mbtimatching.backend.web.dto.ResponseMatching;
+import com.mbtimatching.backend.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ChatService {
+public class ChatService implements ChatServiceInterface {
     private final ChatRoomRepository chatRoomRepository;
-    private final ChatRepository chatRepository;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     /**
      * 모든 채팅방 찾기
      */
-    public Optional<ResponseChatRoom.RoomList> findChatRoomList(String userId) {
-        List<Long> roomList =new ArrayList<>();
-        List<Room> rooms = chatRoomRepository.findAllChatRoom(userId);
-        ResponseChatRoom.RoomList.RoomListBuilder itemBuilder = ResponseChatRoom.RoomList.builder();
-        for(int i = 0 ; i < rooms.size() ; i++) {
-            Room room =rooms.get(i);
-            roomList.add(room.getRoomId());
-        }
-        ResponseChatRoom.RoomList resRoomList = ResponseChatRoom.RoomList.builder()
-                .roomList(roomList)
-                .build();
-
-        return Optional.ofNullable(resRoomList);
+    @Override
+    @Transactional
+    public List<ChatRoom> findAllChatRoom() {
+        return chatRoomRepository.getAllChatRoom();
     }
-
 
     /**
      * 채팅방 만들기
+     * @param email 만든사람 이름
      * @param name 방 이름
      */
-    public Optional<ResponseChatRoom.Room> createRoom(String userId,String name) {
-        Room room = Room.builder()
-                .roomName(name)
-                .user(userRepository.findByUserId(userId))
-                .build();
-        chatRoomRepository.save(room);
-        ResponseChatRoom.Room resRoom = ResponseChatRoom.Room.builder()
-                .roomId((room.getRoomId()).toString())
-                .build();
-        User user = userRepository.findByUserId(userId);
-        user.addRoom(room);
+    @Override
+    @Transactional
+    public void createChatRoom(String email, String name) {
+        Member member = memberRepository.findByEmail(email);
+        if(member == null){
+            throw new CustomJwtRuntimeException();
+        }
 
-        return Optional.ofNullable(resRoom);
-    }
-
-    /////////////////
-
-    /**
-     * 채팅 생성
-     * @param roomId 채팅방 id
-     * @param sender 보낸이
-     * @param message 내용
-     */
-    public Chat createChat(String roomId, String sender, String message) {
-        Room room = chatRoomRepository.findByRoomId(roomId); //방 찾기
-        return chatRepository.save(Chat.createChat(room, sender, message));
+       ChatRoom chatRoom = chatRoomRepository.createChatRoom(name + " - " + member.getNickname());
+       chatRoom.registerNickname(member.getNickname());
+       chatRoom.registerNickname(name);
     }
 
     /**
-     * 채팅방 채팅내용 불러오기
-     * @param roomId 채팅방 id
+     * 멤버의 채팅방 리스트 조회
+     * @param email 방 이름
      */
-//    public List<Chat> findAllChatByRoomId(Long roomId) {
-//        return chatRepository.findAllByRoomId(roomId);
-//    }
-
+    @Override
+    @Transactional
+    public List<ChatRoom> findByMemberChatRooms(String email) {
+        Member member = memberRepository.findByEmail(email);
+        if(member == null){
+            throw new CustomJwtRuntimeException();
+        }
+        return chatRoomRepository.getChatRoomsByNickname(member.getNickname());
+    }
 
 }

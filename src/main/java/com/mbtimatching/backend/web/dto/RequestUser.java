@@ -12,19 +12,18 @@ public class RequestUser {
         @Data
         public static class Register {
             @NotEmpty(message = "이메일이 비어있음")
-            private String userId;
+            private String email;
             @NotEmpty(message = "비밀번호 입력이 되어있지 않음")
             private String password;
             private String gender;
             private MbtiType mbti;
-            private Date birth;
             private String nickname;
         }
 
         @Builder
         @Data
         public static class Login{
-            private String userId;
+            private String email;
             private String password;
         }
 }

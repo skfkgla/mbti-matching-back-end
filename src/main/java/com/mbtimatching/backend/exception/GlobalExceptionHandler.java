@@ -1,9 +1,6 @@
 package com.mbtimatching.backend.exception;
 
-import com.mbtimatching.backend.exception.error.CustomJwtRuntimeException;
-import com.mbtimatching.backend.exception.error.LoginFailedException;
-import com.mbtimatching.backend.exception.error.MbtiApiCallFailException;
-import com.mbtimatching.backend.exception.error.RegisterFailedException;
+import com.mbtimatching.backend.exception.error.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -107,6 +104,17 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(response, ErrorCode.REGISTER_FAILED.getStatus());
+    }
+    @ExceptionHandler(UserDuplicatedException.class)
+    protected ResponseEntity<ErrorResponse> handleUserDuplicatedException(UserDuplicatedException e) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(ErrorCode.USER_DUPLICATED.getCode())
+                .message(ErrorCode.USER_DUPLICATED.getMessage())
+                .status(ErrorCode.USER_DUPLICATED.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, ErrorCode.USER_DUPLICATED.getStatus());
     }
 }
 

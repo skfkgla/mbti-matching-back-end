@@ -9,6 +9,7 @@ import com.mbtimatching.backend.web.dto.CommonResponse;
 import com.mbtimatching.backend.web.dto.RequestMatching;
 import com.mbtimatching.backend.web.dto.ResponseMatching;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class MatchingController {
             JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(token.get());
             userId = jwtAuthToken.getData().getSubject();
         }
-        ResponseMatching.Select user = matchingService.randomMatching(userId).orElseGet(()-> null);
+        ResponseMatching.Select user = matchingService.randomMatching(userId);
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("랜덤 매칭 성공")
